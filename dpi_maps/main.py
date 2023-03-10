@@ -2,18 +2,14 @@
 DPI map scraper.
 """
 import asyncio
-import os
 import traceback
 from dataclasses import dataclass
 
 import structlog
 import typer as typer
 
-from dpi_maps.scrapers import MapType, ReportScraper
+from dpi_maps.scrapers import MapType
 
-DOMAIN = "https://hunting.dpi.nsw.gov.au/licencing/dbnet.aspx?ac=rd&dbpage=glu-gchuntingportallogin"
-USERNAME = os.getenv("DPI_USERNAME")
-PASSWORD = os.getenv("DPI_PASSWORD")
 logger = structlog.get_logger(__name__)
 app = typer.Typer()
 
@@ -26,52 +22,6 @@ class GlobalVars:
 
     directory: str
     verbose: bool
-
-
-async def scraper_event_loop_start(
-    map_type: MapType = MapType.all.name,
-    username: str = USERNAME,
-    password: str = PASSWORD,
-    domain: str = DOMAIN,
-    download_directory: str = None,
-):
-    """
-    Entrypoint with NATS and database connections.
-    """
-    from dpi_maps.scrapers import MapScraper
-
-    if download_directory is None:
-        typer.echo("no download directory specified")
-        raise typer.Exit()
-    scraper = MapScraper(
-        domain=domain,
-        username=username,
-        password=password,
-        map_type=map_type,
-        download_directory=download_directory,
-    )
-    await scraper.start()
-
-
-async def reports_event_loop_start(
-    username: str = USERNAME,
-    password: str = PASSWORD,
-    domain: str = DOMAIN,
-    download_directory: str = None,
-):
-    """
-    Entrypoint with NATS and database connections.
-    """
-    if download_directory is None:
-        typer.echo("no download directory specified")
-        raise typer.Exit()
-    scraper = ReportScraper(
-        domain=domain,
-        username=username,
-        password=password,
-        download_directory=download_directory,
-    )
-    await scraper.start()
 
 
 @app.callback()
@@ -111,8 +61,10 @@ def reports(
     password: str = typer.Option("", envvar="DPI_PASSWORD", help="DPI Portal password/pin"),
 ):
     """
-    Scan downloaded DPI previously harvested PDF and.
+    Download the most recent DPI species report.
     """
+    from dpi_maps.scrapers import reports_event_loop_start
+
     if username == "" or password == "":
         typer.echo("username and password must be supplied. exiting...")
         raise typer.Exit()
@@ -145,9 +97,11 @@ def scrape(
 
     Maps are downloaded to the --directory, $DPI_DIRECTORY or to the
     default of '/tmp/dpi'. Username and Password must be present.
-    --map-target refers to the type of map to download (default: pdf
+    --map-type refers to the type of map to download (default: pdf
     and kmz)
     """
+    from dpi_maps.scrapers import scraper_event_loop_start
+
     if username == "" or password == "":
         typer.echo("username and password must be supplied. exiting...")
         raise typer.Exit()
