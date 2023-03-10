@@ -1,0 +1,46 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  PROJECT: dpi-maps
+  REGISTRY: danielmichaels
+  IMAGE: "{{.PROJECT}}"
+  TAG: latest
+
+tasks:
+  default:
+    desc: |
+      List all available tasks
+    cmds:
+      - task --list
+    silent: true
+
+  env:
+    desc: |
+      Print all environment variables sorted alphabetically
+    cmds:
+      - env | sort
+    silent: true
+
+  dev:
+    desc: |
+      Run the local development environment
+    cmds:
+      - watchfiles "python app/main.py" .
+
+  docker-build:
+    desc: |
+      Build the docker image
+    cmds:
+      - docker build . -f deploy/Dockerfile -t "{{.REGISTRY}}/{{.IMAGE}}"
+
+  docker-push:
+    desc: |
+      Push the docker image
+    cmds:
+      - docker push "{{.REGISTRY}}/{{.IMAGE}}"
+
+  docker.run:
+    cmds:
+      - docker run --rm -it "{{.REGISTRY}}/{{.IMAGE}}"

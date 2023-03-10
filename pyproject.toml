@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "dpi-maps"
+version = "0.0.1"
+description = "Download maps from the Deptment of Prime Industries for use in R license activites."
+authors = ["Daniel Michaels <dan@danielms.site>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+typer = { extras = ["all"], version = "^0.7.0" }
+playwright = "^1.31.1"
+fake-useragent = "^1.1.1"
+structlog = "^22.3.0"
+httpx = "^0.23.3"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+isort = "^5.12.0"
+ruff = "^0.0.254"
+pre-commit = "^3.1.1"
+pytest = "^7.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+dpi-maps = "dpi_maps.main:app"
+
+[tool.ruff]
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    # "I",  # isort
+    "C", # flake8-comprehensions
+    "B", # flake8-bugbear
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+]
+[tool.isort]
+profile = "black"
+[tool.black]
+line-length = 100
