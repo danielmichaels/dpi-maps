@@ -281,7 +281,7 @@ class ReportScraper(Scraper):
         for report in self.reports:
             try:
                 r = httpx.get(report.get("href"), timeout=20)
-                title = f'{report.get("title")}'.replace("/", "_")
+                title = f'{report.get("title")}'.replace("/", "_").replace(" ", "_")
                 file = path / f"{title}.pdf"
                 file.write_bytes(data=r.content)
                 logger.info(

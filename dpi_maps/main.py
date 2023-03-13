@@ -11,7 +11,7 @@ import typer as typer
 from dpi_maps.scrapers import MapType
 
 logger = structlog.get_logger(__name__)
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True)
 
 
 @dataclass
@@ -36,20 +36,14 @@ def cli(
     DPI Map Scaper.
 
     This application retrieves all the maps from the DPI website. It
-    requires a valid login to the portal. Use at own risk.
+    requires a valid login to the portal.
+
+    Set DPI_USERNAME and DPI_PASSWORD environment
+    variables before attempting to run any commands.
+
+    Use at own risk.
     """
     ctx.obj = GlobalVars(directory=directory, verbose=verbose)
-
-
-@app.command(name="scan")
-def scan(
-    ctx: typer.Context,
-    filename: str,
-):
-    """
-    Scan downloaded DPI previously harvested PDF and.
-    """
-    print(f"now scanning '{ctx.obj.directory}/{filename}'")
 
 
 @app.command(name="reports")
