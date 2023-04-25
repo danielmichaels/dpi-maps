@@ -38,8 +38,8 @@ def cli(
     This application retrieves all the maps from the DPI website. It
     requires a valid login to the portal.
 
-    Set DPI_USERNAME and DPI_PASSWORD environment
-    variables before attempting to run any commands.
+    Set DPI_USERNAME and DPI_PASSWORD environment variables before
+    attempting to run any commands.
 
     Use at own risk.
     """
