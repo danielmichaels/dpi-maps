@@ -127,7 +127,7 @@ class MapScraper(Scraper):
             dropdowns.append({"name": txt, "value": val})
 
         result = []
-        for option in dropdowns[5:7]:
+        for option in dropdowns:
             await self.page.get_by_label("Hunting Area").select_option(option.get("name"))
             pdf = await self.page.query_selector(
                 "#areasList > table > tbody > tr:nth-child(3) > td:nth-child(1) > a"
