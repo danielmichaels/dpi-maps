@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dpi-maps"
-version = "0.0.1"
+version = "0.0.2"
 description = "Download maps from the Deptment of Prime Industries for use in R license activites."
 authors = ["Daniel Michaels <dan@danielms.site>"]
 readme = "README.md"
