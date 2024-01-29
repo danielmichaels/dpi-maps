@@ -1,6 +1,7 @@
 """
 DPI map scraper.
 """
+
 import asyncio
 import traceback
 from dataclasses import dataclass
